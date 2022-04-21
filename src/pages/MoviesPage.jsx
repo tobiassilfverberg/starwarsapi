@@ -21,7 +21,7 @@ const MoviesPage = () => {
 		<>
 			<h1 className="mt-2">Movies</h1>
 
-			{todos.length > 0 && (
+			{movies.length > 0 && (
 				<ListGroup className="movies">
 					{movies.map((movie) => (
 						<ListGroup.Item

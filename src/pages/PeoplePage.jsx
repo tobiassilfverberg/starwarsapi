@@ -21,7 +21,7 @@ const PeoplePage = () => {
 		<>
 			<h1 className="mt-2">Characters</h1>
 
-			{todos.length > 0 && (
+			{people.length > 0 && (
 				<ListGroup className="people">
 					{people.map((person) => (
 						<ListGroup.Item

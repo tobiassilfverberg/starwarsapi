@@ -9,7 +9,7 @@ const MoviePage = () => {
 	const { id } = useParams()
 
 	const getMovie = async (id) => {
-		const data = await TodosAPI.getMovie(id)
+		const data = await swapi.getMovie(id)
 		setMovie(data)
 	}
 

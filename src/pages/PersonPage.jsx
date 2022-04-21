@@ -9,7 +9,7 @@ const PersonPage = () => {
 	const { id } = useParams()
 
 	const getPerson = async (id) => {
-		const data = await TodosAPI.getPerson(id)
+		const data = await swapi.getPerson(id)
 		setPerson(data)
 	}
 
