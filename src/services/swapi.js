@@ -1,6 +1,6 @@
 import axios from "axios"
 
-const BASE_URL = "https://swapi.dev/api/"
+const BASE_URL = "https://swapi.dev/api"
 
 /**
  * Get all people
@@ -34,9 +34,20 @@ const getMovie = async (id) => {
 	return res.data
 }
 
+const getIdFromUrl = (url) => {
+	// eslint-disable-next-line no-unused-vars
+	const [_endpoint, id] = url
+		.replace("https://swapi.dev/api/", "")
+		.slice(0, -1)
+		.split("/")
+
+	return id
+}
+
 export default {
 	getPeople,
 	getPerson,
 	getMovies,
 	getMovie,
+	getIdFromUrl,
 }
