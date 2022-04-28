@@ -91,7 +91,7 @@ const PeoplePage = () => {
 					{" "}
 					{searchResult && (
 						<p>
-							Showing {people.count} search results for {query}...
+							Showing {people.length} search results for {query}...
 						</p>
 					)}
 				</>
