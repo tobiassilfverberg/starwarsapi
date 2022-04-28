@@ -62,7 +62,9 @@ const MoviesPage = () => {
 								</p>
 								<Button
 									as={Link}
-									to={`/films/${movie.episode_id}`}
+									to={`/movie/${swapi.getIdFromUrl(
+										movie.url
+									)}`}
 								>
 									Read more
 								</Button>
