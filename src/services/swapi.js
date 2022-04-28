@@ -1,12 +1,12 @@
 import axios from "axios"
 
-const BASE_URL = "https://swapi.dev/api"
+axios.defaults.baseURL = "https://swapi.dev/api"
 
 /**
  * Get all people
  */
-const getPeople = async () => {
-	const res = await axios.get(`${BASE_URL}/people`)
+const getPeople = async (page) => {
+	const res = await axios.get(`/people/?page=${page}`)
 	return res.data
 }
 
@@ -14,15 +14,15 @@ const getPeople = async () => {
  * Get a single person
  */
 const getPerson = async (id) => {
-	const res = await axios.get(`${BASE_URL}/people/${id}`)
+	const res = await axios.get(`/people/${id}`)
 	return res.data
 }
 
 /**
  * Get all movies
  */
-const getMovies = async () => {
-	const res = await axios.get(`${BASE_URL}/films`)
+const getMovies = async (page) => {
+	const res = await axios.get(`/films?page=${page}`)
 	return res.data
 }
 
@@ -30,7 +30,7 @@ const getMovies = async () => {
  * Get a single movie
  */
 const getMovie = async (id) => {
-	const res = await axios.get(`${BASE_URL}/films/${id}`)
+	const res = await axios.get(`/films/${id}`)
 	return res.data
 }
 
