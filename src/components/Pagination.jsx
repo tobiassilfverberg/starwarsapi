@@ -10,7 +10,7 @@ const Pagination = ({ page, setPage, data }) => {
 	}
 
 	return (
-		<div className="d-flex justify-content-between align-items-center mt-4">
+		<div className="d-flex justify-content-between align-items-center mt-4 mb-4">
 			<div className="prev">
 				<Button
 					disabled={!data.previous}
