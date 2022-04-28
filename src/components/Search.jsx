@@ -1,54 +1,30 @@
-const Search = () => {
+import Form from "react-bootstrap/Form"
+import Button from "react-bootstrap/Button"
+
+const Search = ({ onHandleSubmit, onSearchInput, onSetSearchInput }) => {
 	return (
 		<>
-			<Form onSubmit={handleSubmit}>
-				<Form.Group className="mb-3" controlId="newTitle">
-					<Form.Label>Search Query</Form.Label>
+			<Form onSubmit={onHandleSubmit}>
+				<Form.Group className="mb-3" controlId="newSearch">
 					<Form.Control
-						onChange={(e) => setSearchInput(e.target.value)}
-						placeholder="Enter your search query"
-						ref={searchInputRef}
+						onChange={(e) => onSetSearchInput(e.target.value)}
+						placeholder="May the search be with you..."
 						required
 						type="text"
-						value={searchInput}
+						value={onSearchInput}
 					/>
 				</Form.Group>
 
-				<div className="d-flex justify-content-between">
+				<div className="d-flex justify-content-between mb-4">
 					<Button
 						variant="success"
 						type="submit"
-						disabled={!searchInput.length}
+						disabled={!onSearchInput.length}
 					>
 						Search
 					</Button>
 				</div>
 			</Form>
-
-			{searchResult && (
-				<div className="search-result mt-4">
-					<p>
-						Showing {searchResult.nbHits} search results for{" "}
-						{searchResult.query}...
-					</p>
-
-					<ListGroup>
-						{searchResult.hits.map((hit) => (
-							<ListGroup.Item
-								action
-								href={hit.url}
-								target="_blank"
-								key={hit.objectID}
-							>
-								<h3>{hit.title}</h3>
-								<p className="text-muted small mb-0">
-									Posted at {hit.created_at} by {hit.author}
-								</p>
-							</ListGroup.Item>
-						))}
-					</ListGroup>
-				</div>
-			)}
 		</>
 	)
 }
