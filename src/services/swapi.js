@@ -2,35 +2,28 @@ import axios from "axios"
 
 axios.defaults.baseURL = "https://swapi.dev/api"
 
-/**
- * Get all people
- */
 const getPeople = async (page) => {
 	const res = await axios.get(`/people/?page=${page}`)
 	return res.data
 }
 
-/**
- * Get a single person
- */
 const getPerson = async (id) => {
 	const res = await axios.get(`/people/${id}`)
 	return res.data
 }
 
-/**
- * Get all movies
- */
 const getMovies = async (page) => {
 	const res = await axios.get(`/films?page=${page}`)
 	return res.data
 }
 
-/**
- * Get a single movie
- */
 const getMovie = async (id) => {
 	const res = await axios.get(`/films/${id}`)
+	return res.data
+}
+
+const searchApi = async (resource, query, page) => {
+	const res = await axios.get(`${resource}/?search=${query}&page=${page}`)
 	return res.data
 }
 
@@ -50,4 +43,5 @@ export default {
 	getMovies,
 	getMovie,
 	getIdFromUrl,
+	searchApi,
 }
