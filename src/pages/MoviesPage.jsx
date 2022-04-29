@@ -5,18 +5,25 @@ import swapi from "../services/swapi"
 import Loading from "../components/Loading"
 import Pagination from "../components/Pagination"
 import Search from "../components/Search"
+import MovieCard from "../components/MovieCard"
 
 const MoviesPage = () => {
 	const [data, setData] = useState([])
 	const [error, setError] = useState(null)
 	const [loading, setLoading] = useState(false)
-	const [page, setPage] = useState(1)
-	const [movies, setMovies] = useState([])
 	const [searchInput, setSearchInput] = useState([])
-	const [searchResult, setSearchResult] = useState(false)
 
 	const [searchParams, setSearchParams] = useSearchParams()
-	const query = searchParams.get("query")
+	const query = searchParams.get("query") ?? ""
+	const page = parseInt(searchParams.get("page") ?? 1)
+
+	const nextPage = () => {
+		setSearchParams({ query, page: page + 1 })
+	}
+
+	const prevPage = () => {
+		setSearchParams({ query, page: page - 1 })
+	}
 
 	// Get todos from api
 	const getMovies = async (searchQuery, page) => {
@@ -25,7 +32,6 @@ const MoviesPage = () => {
 		try {
 			const res = await swapi.getMovies(searchQuery, page)
 			setData(res)
-			setMovies(res.results)
 
 			setLoading(false)
 		} catch (err) {
@@ -34,7 +40,7 @@ const MoviesPage = () => {
 	}
 
 	const searchSwapi = async (searchQuery, page) => {
-		setMovies([])
+		setData([])
 		setLoading(true)
 
 		try {
@@ -42,9 +48,7 @@ const MoviesPage = () => {
 			if (res.count === 0) {
 				return
 			}
-			setMovies(res.results)
-			setData(data)
-			setSearchResult(true)
+			setData(res)
 
 			setLoading(false)
 		} catch (err) {
@@ -54,15 +58,14 @@ const MoviesPage = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
-		setMovies([])
+		setData([])
 
 		if (!searchInput) {
 			return
 		}
 
-		setPage(1)
 		searchSwapi(searchInput, 1)
-		setSearchParams({ query: searchInput })
+		setSearchParams({ query: searchInput, page: 1 })
 	}
 
 	// Get todos from api when component is first mounted
@@ -92,56 +95,27 @@ const MoviesPage = () => {
 			{!loading && (
 				<>
 					{" "}
-					{searchResult && (
+					{query && (
 						<p>
-							Showing {movies.length} search results for {query}...
+							Showing {data.count} search results for {query}
+							...
 						</p>
 					)}
 				</>
 			)}
 
-			{movies && (
-				<div className="people container d-flex flex-wrap gap-1">
-					{movies.map((movie) => (
-						<div className="card col-4" key={movie.title}>
-							<h2 className="card-header">{movie.title}</h2>
-							<div className="card-body">
-								<p>
-									{" "}
-									<span className="fw-bold">
-										Episode:
-									</span>{" "}
-									{movie.episode_id}
-								</p>
-								<p>
-									{" "}
-									<span className="fw-bold">
-										Released:
-									</span>{" "}
-									{movie.release_date}
-								</p>
-								<p>
-									{" "}
-									<span className="fw-bold">
-										Characters
-									</span>{" "}
-									{movie.characters.length}
-								</p>
-								<Button
-									as={Link}
-									to={`/movie/${swapi.getIdFromUrl(
-										movie.url
-									)}`}
-								>
-									Read more
-								</Button>
-							</div>
-						</div>
-					))}
+			{data.count > 0 && (
+				<div className="people container d-flex flex-wrap row">
+					<MovieCard movies={data} />
 				</div>
 			)}
 			{!loading && (
-				<Pagination page={page} setPage={setPage} data={data} />
+				<Pagination
+					page={page}
+					prevPage={prevPage}
+					nextPage={nextPage}
+					data={data}
+				/>
 			)}
 		</>
 	)
