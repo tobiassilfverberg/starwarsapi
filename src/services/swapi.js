@@ -37,7 +37,7 @@ const getIdFromUrl = (url) => {
 	return id
 }
 
-export default {
+const values = {
 	getPeople,
 	getPerson,
 	getMovies,
@@ -45,3 +45,5 @@ export default {
 	getIdFromUrl,
 	searchApi,
 }
+
+export default values
