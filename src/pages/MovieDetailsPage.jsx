@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import Button from "react-bootstrap/Button"
 import Loading from "../components/Loading"
@@ -13,7 +13,7 @@ const MoviePage = () => {
 	const navigate = useNavigate()
 	const { id } = useParams()
 
-	const getMovie = async () => {
+	const getMovie = useCallback(async () => {
 		setLoading(true)
 
 		try {
@@ -26,11 +26,11 @@ const MoviePage = () => {
 			setLoading(false)
 			setError(err.message)
 		}
-	}
+	}, [id])
 
 	useEffect(() => {
 		getMovie()
-	}, [])
+	}, [getMovie])
 
 	return (
 		<>

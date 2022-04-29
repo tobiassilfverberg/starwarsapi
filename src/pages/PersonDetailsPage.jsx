@@ -1,5 +1,5 @@
 import Button from "react-bootstrap/Button"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import Loading from "../components/Loading"
 import swapi from "../services/swapi"
@@ -13,7 +13,7 @@ const PersonDetailsPage = () => {
 	const { id } = useParams()
 	const navigate = useNavigate()
 
-	const getPerson = async () => {
+	const getPerson = useCallback(async () => {
 		setLoading(true)
 		try {
 			const res = await swapi.getPerson(id)
@@ -25,11 +25,11 @@ const PersonDetailsPage = () => {
 			setLoading(false)
 			setError(err.message)
 		}
-	}
+	}, [id])
 
 	useEffect(() => {
 		getPerson()
-	}, [])
+	}, [getPerson])
 
 	return (
 		<>
