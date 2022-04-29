@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
-import { Link, useSearchParams } from "react-router-dom"
-import Button from "react-bootstrap/Button"
+import { useSearchParams } from "react-router-dom"
 import swapi from "../services/swapi"
 import Loading from "../components/Loading"
 import Pagination from "../components/Pagination"
