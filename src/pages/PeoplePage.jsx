@@ -1,22 +1,28 @@
 import { useEffect, useState } from "react"
-import Button from "react-bootstrap/Button"
-import { Link, useSearchParams } from "react-router-dom"
+import { useSearchParams } from "react-router-dom"
 import swapi from "../services/swapi"
 import Pagination from "../components/Pagination"
 import Loading from "../components/Loading"
 import Search from "../components/Search"
+import PersonCard from "../components/PersonCard"
 
 const PeoplePage = () => {
 	const [data, setData] = useState([])
 	const [error, setError] = useState(null)
 	const [loading, setLoading] = useState(false)
-	const [page, setPage] = useState(1)
-	const [people, setPeople] = useState([])
 	const [searchInput, setSearchInput] = useState([])
-	const [searchResult, setSearchResult] = useState(false)
 
 	const [searchParams, setSearchParams] = useSearchParams()
-	const query = searchParams.get("query")
+	const query = searchParams.get("query") ?? ""
+	const page = parseInt(searchParams.get("page") ?? 1)
+
+	const nextPage = () => {
+		setSearchParams({ query, page: page + 1 })
+	}
+
+	const prevPage = () => {
+		setSearchParams({ query, page: page - 1 })
+	}
 
 	// Get characters from api
 	const getPeople = async (searchQuery, page) => {
@@ -25,7 +31,6 @@ const PeoplePage = () => {
 		try {
 			const res = await swapi.getPeople(searchQuery, page)
 			setData(res)
-			setPeople(res.results)
 
 			setLoading(false)
 		} catch (err) {
@@ -34,7 +39,7 @@ const PeoplePage = () => {
 	}
 
 	const searchSwapi = async (searchQuery, page) => {
-		setPeople([])
+		setData([])
 		setLoading(true)
 
 		try {
@@ -42,9 +47,7 @@ const PeoplePage = () => {
 			if (res.count === 0) {
 				return
 			}
-			setPeople(res.results)
-			setData(data)
-			setSearchResult(true)
+			setData(res)
 
 			setLoading(false)
 		} catch (err) {
@@ -54,15 +57,14 @@ const PeoplePage = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault()
-		setPeople([])
+		setData([])
 
 		if (!searchInput) {
 			return
 		}
 
-		setPage(1)
 		searchSwapi(searchInput, 1)
-		setSearchParams({ query: searchInput })
+		setSearchParams({ query: searchInput, page: 1 })
 	}
 
 	// call function to get characters from api
@@ -89,9 +91,10 @@ const PeoplePage = () => {
 			{!loading && (
 				<>
 					{" "}
-					{searchResult && (
+					{query && (
 						<p>
-							Showing {people.length} search results for {query}...
+							Showing {data.count} search results for {query}
+							...
 						</p>
 					)}
 				</>
@@ -99,49 +102,17 @@ const PeoplePage = () => {
 
 			{error && { error }}
 
-			{people.length > 0 && (
-				<div className="people container d-flex flex-wrap gap-1">
-					{people.map((person) => (
-						<div key={person.name} className="card col-4">
-							<h2 className="card-header">{person.name}</h2>
-							<div className="card-body">
-								<p>
-									<span className="fw-bold">Gender: </span>{" "}
-									{person.gender}
-								</p>
-								<p>
-									{" "}
-									<span className="fw-bold">
-										{" "}
-										Born:{" "}
-									</span>{" "}
-									{person.birth_year}
-								</p>
-								<p>
-									{" "}
-									<span className="fw-bold">
-										{" "}
-										In films:{" "}
-									</span>{" "}
-									{person.films.length}
-								</p>
-								<Button
-									as={Link}
-									to={`/person/${swapi.getIdFromUrl(
-										person.url
-									)}`}
-								>
-									Read more
-								</Button>
-							</div>
-						</div>
-					))}
+			{data.count > 0 && (
+				<div className="people container d-flex flex-wrap row">
+					<PersonCard people={data} />
 				</div>
 			)}
+
 			{!loading && (
 				<Pagination
 					page={page}
-					setPage={setPage}
+					prevPage={prevPage}
+					nextPage={nextPage}
 					data={data}
 				/>
 			)}
