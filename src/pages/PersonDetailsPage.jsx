@@ -1,8 +1,9 @@
 import Button from "react-bootstrap/Button"
 import { useEffect, useState } from "react"
-import { useParams, Link, useNavigate } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import Loading from "../components/Loading"
 import swapi from "../services/swapi"
+import PersonDetails from "../components/PersonDetails"
 
 const PersonDetailsPage = () => {
 	const [error, setError] = useState(null)
@@ -37,70 +38,7 @@ const PersonDetailsPage = () => {
 			{error && { error }}
 
 			{personDetails && (
-				<div className="movie container mt-5">
-					<div className="card col-12" key={personDetails.name}>
-						<h2 className="card-header">{personDetails.name}</h2>
-						<div className="card-body">
-							<h4>Attributes</h4>
-							<p>
-								{" "}
-								<span className="fw-bold">Gender: </span>{" "}
-								{personDetails.gender}
-							</p>
-							<p>
-								<span className="fw-bold">Birth year: </span>
-								{personDetails.birth_year}
-							</p>
-							<p>
-								<span className="fw-bold">Height: </span>
-								{personDetails.height} cm
-							</p>
-							<p>
-								{" "}
-								<span className="fw-bold">Mass: </span>{" "}
-								{personDetails.mass} kg
-							</p>
-							<p>
-								{" "}
-								<span className="fw-bold">
-									Hair color:{" "}
-								</span>{" "}
-								{personDetails.hair_color}
-							</p>
-							<p>
-								{" "}
-								<span className="fw-bold">
-									Skin color:{" "}
-								</span>{" "}
-								{personDetails.skin_color}
-							</p>
-							<p>
-								{" "}
-								<span className="fw-bold">
-									Eye color:{" "}
-								</span>{" "}
-								{personDetails.eye_color}
-							</p>
-							<p>
-								<span className="fw-bold"> Films: </span>
-							</p>
-							<ul className="list-group">
-								{films.map((film) => (
-									<Link
-										key={swapi.getIdFromUrl(film)}
-										to={`/movie/${swapi.getIdFromUrl(
-											film
-										)}`}
-									>
-										<li className="list-group-item">
-											Film {swapi.getIdFromUrl(film)}
-										</li>
-									</Link>
-								))}
-							</ul>
-						</div>
-					</div>
-				</div>
+				<PersonDetails person={personDetails} films={films} />
 			)}
 			<Button
 				variant="primary"
