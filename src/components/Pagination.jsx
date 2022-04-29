@@ -1,14 +1,6 @@
 import Button from "react-bootstrap/Button"
 
-const Pagination = ({ page, setPage, data }) => {
-	const nextPage = () => {
-		setPage((prevValue) => prevValue + 1)
-	}
-
-	const prevPage = () => {
-		setPage((prevValue) => prevValue - 1)
-	}
-
+const Pagination = ({ page, prevPage, nextPage, data }) => {
 	return (
 		<div className="d-flex justify-content-between align-items-center mt-4 mb-4">
 			<div className="prev">
