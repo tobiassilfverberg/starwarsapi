@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react"
-import { useParams, Link, useNavigate } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import Button from "react-bootstrap/Button"
 import Loading from "../components/Loading"
 import swapi from "../services/swapi"
+import MovieDetails from "../components/MovieDetails"
 
 const MoviePage = () => {
 	const [characters, setCharacters] = useState([])
@@ -38,50 +39,7 @@ const MoviePage = () => {
 			{error && { error }}
 
 			{movieDetails && (
-				<div className="movie container mt-5">
-					<div className="card col-12" key={movieDetails.title}>
-						<h2 className="card-header">{movieDetails.title}</h2>
-						<div className="card-body">
-							<h4>Attributes</h4>
-							<p>
-								{" "}
-								<span className="fw-bold">Episode:</span>{" "}
-								{movieDetails.episode_id}
-							</p>
-							<p>
-								<span className="fw-bold">Director: </span>
-								{movieDetails.director}
-							</p>
-							<p>
-								<span className="fw-bold">Producer: </span>
-								{movieDetails.producer}
-							</p>
-							<p>
-								{" "}
-								<span className="fw-bold">Released: </span>{" "}
-								{movieDetails.release_date}
-							</p>
-							<p>
-								<span className="fw-bold"> Characters: </span>
-							</p>
-							<ul className="list-group">
-								{characters.map((character) => (
-									<Link
-										key={swapi.getIdFromUrl(character)}
-										to={`/person/${swapi.getIdFromUrl(
-											character
-										)}`}
-									>
-										<li className="list-group-item">
-											Character{" "}
-											{swapi.getIdFromUrl(character)}
-										</li>
-									</Link>
-								))}
-							</ul>
-						</div>
-					</div>
-				</div>
+				<MovieDetails movie={movieDetails} characters={characters} />
 			)}
 			<Button
 				variant="primary"
